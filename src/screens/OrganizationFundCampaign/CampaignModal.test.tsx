@@ -2,6 +2,7 @@ import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import { DesktopDateTimePicker } from '@mui/x-date-pickers/DesktopDateTimePicker';
 import type { RenderResult } from '@testing-library/react';
 import {
   cleanup,
@@ -10,6 +11,7 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
+import { describe, expect, vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -22,18 +24,16 @@ import { MOCKS, MOCK_ERROR } from './OrganizationFundCampaignMocks';
 import type { InterfaceCampaignModal } from './CampaignModal';
 import CampaignModal from './CampaignModal';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
+vi.mock('@mui/x-date-pickers/DateTimePicker', () => {
   return {
-    DateTimePicker: jest.requireActual(
-      '@mui/x-date-pickers/DesktopDateTimePicker',
-    ).DesktopDateTimePicker,
+    DateTimePicker: DesktopDateTimePicker,
   };
 });
 
@@ -46,7 +46,7 @@ const translations = JSON.parse(
 const campaignProps: InterfaceCampaignModal[] = [
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     fundId: 'fundId',
     orgId: 'orgId',
     campaign: {
@@ -58,12 +58,12 @@ const campaignProps: InterfaceCampaignModal[] = [
       currency: 'USD',
       createdAt: '2021-01-01',
     },
-    refetchCampaign: jest.fn(),
+    refetchCampaign: vi.fn(),
     mode: 'create',
   },
   {
     isOpen: true,
-    hide: jest.fn(),
+    hide: vi.fn(),
     fundId: 'fundId',
     orgId: 'orgId',
     campaign: {
@@ -75,7 +75,7 @@ const campaignProps: InterfaceCampaignModal[] = [
       currency: 'USD',
       createdAt: '2021-01-01',
     },
-    refetchCampaign: jest.fn(),
+    refetchCampaign: vi.fn(),
     mode: 'edit',
   },
 ];
@@ -100,7 +100,7 @@ const renderCampaignModal = (
 
 describe('CampaignModal', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     cleanup();
   });
 
