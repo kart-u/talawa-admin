@@ -11,6 +11,7 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { describe, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -27,12 +28,14 @@ import {
 } from './OrganizationFundCampaignMocks';
 import type { ApolloLink } from '@apollo/client';
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
-}));
+vi.mock('react-toastify', () => {
+  return {
+    toast: {
+      success: vi.fn(),
+      error: vi.fn(),
+    },
+  };
+});
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', () => {
   return {
@@ -82,12 +85,14 @@ const renderFundCampaign = (link: ApolloLink): RenderResult => {
 };
 
 describe('FundCampaigns Screen', () => {
-  beforeEach(async () => {
-    const ReactRouterDom = await vi.importActual('react-router-dom');
-    vi.mock('react-router-dom', () => ({
-      ...ReactRouterDom,
-      useParams: () => ({ orgId: 'orgId', fundId: 'fundId' }),
-    }));
+  beforeEach(() => {
+    vi.mock('react-router-dom', async () => {
+      const ReactRouterDom = await vi.importActual('react-router-dom');
+      return {
+        ...ReactRouterDom,
+        useParams: () => ({ orgId: 'orgId', fundId: 'fundId' }),
+      };
+    });
   });
 
   afterEach(() => {

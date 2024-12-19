@@ -11,6 +11,7 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { describe, expect, vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -24,12 +25,14 @@ import { MOCKS, MOCK_ERROR } from './OrganizationFundCampaignMocks';
 import type { InterfaceCampaignModal } from './CampaignModal';
 import CampaignModal from './CampaignModal';
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
-}));
+vi.mock('react-toastify', () => {
+  return {
+    toast: {
+      success: vi.fn(),
+      error: vi.fn(),
+    },
+  };
+});
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', () => {
   return {
